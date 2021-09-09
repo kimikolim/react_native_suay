@@ -1,11 +1,21 @@
 import { StatusBar } from "expo-status-bar"
 import React, { useState } from "react"
-import { StyleSheet, Text, View } from "react-native"
+import {createStore, combineReducers, applyMiddleware} from 'redux'
+import {Provider} from 'react-redux'
+import SuayNavigator from "./navigation/SuayNavigator"
+import ReduxThunk from 'redux-thunk'
 
 //Custom font styles
 import * as Fonts from "expo-font"
 import AppLoading from "expo-app-loading"
-import DefaultText from "./components/DefaultText"
+
+import itemsReducer from './store/reducer/items'
+
+const rootReducer = combineReducers({
+  items: itemsReducer
+})
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 
 const fetchFonts = () => {
 	return Fonts.loadAsync({
@@ -28,18 +38,9 @@ export default function App() {
 	}
 
 	return (
-		<View style={styles.container}>
-			<DefaultText>Open up App.js to start working on your app!</DefaultText>
-			<StatusBar style="auto" />
-		</View>
+		<Provider store={store}>
+      <SuayNavigator />
+    </Provider>
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-})

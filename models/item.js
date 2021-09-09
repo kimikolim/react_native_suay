@@ -14,8 +14,8 @@ class Item {
 
     get readableDate() {
         return (
-            moment(this.dateExpired).format('DDMMYYYY'),
-            moment(this.datePurchased).format('DDMMYYYY')
+            moment(this.dateExpired).format('DD/MM/YYYY'),
+            moment(this.datePurchased).format('DD/MM/YYYY')
         )
     }
 
