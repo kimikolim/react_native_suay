@@ -161,7 +161,7 @@ const AuthScreen = (props) => {
 }
 
 AuthScreen.navigationOptions = {
-	headerTitle: "Login/Signup",
+	headerTitle: "Login / Signup",
 }
 
 export default AuthScreen

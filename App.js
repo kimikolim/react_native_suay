@@ -9,11 +9,11 @@ import AppLoading from "expo-app-loading"
 import * as Fonts from "expo-font"
 //Redux reducers
 import itemsReducer from "./store/reducer/items"
-// import authReducer from "./store/reducer/auth"
+import authReducer from "./store/reducer/auth"
 
 const rootReducer = combineReducers({
 	items: itemsReducer,
-	// auth: authReducer,
+	auth: authReducer,
 })
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk))

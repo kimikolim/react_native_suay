@@ -27,8 +27,8 @@ export const signup = (email, password) => {
 			// console.log(respData)
 
 			dispatch(authenticate(respData.localId, respData.idToken))
-			// const expirationDate = new Date(new Date().getTime() + parseInt(respData.expiresIn) * 1000)
-			saveDataToStorage(respData.idToken, respData.localId, /*expirationDate*/)
+			const expirationDate = new Date(new Date().getTime() + parseInt(respData.expiresIn) * 1000)
+			saveDataToStorage(respData.idToken, respData.localId, expirationDate)
 		} catch (error) {
 			let message = 'Oops! Something went wrong.'
             const errorResp = error.response.data.error.message
@@ -59,8 +59,8 @@ export const login = (email, password) => {
 			// console.log(respData)
 
 			dispatch(authenticate(respData.localId, respData.idToken))
-			// const expirationDate = new Date(new Date().getTime() + parseInt(respData.expiresIn) * 1000)
-			saveDataToStorage(respData.idToken, respData.localId, /*expirationDate*/)
+			const expirationDate = new Date(new Date().getTime() + parseInt(respData.expiresIn) * 1000)
+			saveDataToStorage(respData.idToken, respData.localId, expirationDate)
 		} catch (error) {
             let message = 'Oops! Something went wrong.'
             const errorResp = error.response.data.error.message
@@ -75,11 +75,11 @@ export const login = (email, password) => {
 	}
 }
 
-const saveDataToStorage = (token, userID, /*expirationDate*/) => {
+const saveDataToStorage = (token, userID, expirationDate) => {
     AsyncStorage.setItem('userData', JSON.stringify({
         token: token,
         userID: userID,
-        // expiryDate: expirationDate.toISOString()
+        expiryDate: expirationDate.toISOString()
     }))
 }
 
