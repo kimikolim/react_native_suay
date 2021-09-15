@@ -1,18 +1,19 @@
-import { StatusBar } from "expo-status-bar"
 import React, { useState } from "react"
-import {createStore, combineReducers, applyMiddleware} from 'redux'
-import {Provider} from 'react-redux'
+import { createStore, combineReducers, applyMiddleware } from "redux"
+import { Provider } from "react-redux"
 import SuayNavigator from "./navigation/SuayNavigator"
-import ReduxThunk from 'redux-thunk'
+import ReduxThunk from "redux-thunk"
+import AppLoading from "expo-app-loading"
 
 //Custom font styles
 import * as Fonts from "expo-font"
-import AppLoading from "expo-app-loading"
-
-import itemsReducer from './store/reducer/items'
+//Redux reducers
+import itemsReducer from "./store/reducer/items"
+// import authReducer from "./store/reducer/auth"
 
 const rootReducer = combineReducers({
-  items: itemsReducer
+	items: itemsReducer,
+	// auth: authReducer,
 })
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
@@ -39,8 +40,7 @@ export default function App() {
 
 	return (
 		<Provider store={store}>
-      <SuayNavigator />
-    </Provider>
+			<SuayNavigator />
+		</Provider>
 	)
 }
-

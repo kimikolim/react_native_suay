@@ -9,6 +9,14 @@ import colors from "../../constants/colors"
 
 const AdminItemsScreen = (props) => {
 	const allItems = useSelector((state) => state.items.allItems)
+
+	const selectItemHandler = (id, title) => {
+        // console.log("button pressed");
+        props.navigation.navigate("AdminDetails", {
+            itemID: id,
+            itemTitle: title,
+        })
+    }
 	return (
 		<FlatList
 			data={allItems}
@@ -17,12 +25,12 @@ const AdminItemsScreen = (props) => {
 				image={itemData.item.imgURL}
 				title={itemData.item.title}
 				dateExpiry={itemData.item.dateExpired}
-				onSelect={() => {}}
+				onSelect={() => {selectItemHandler(itemData.item.id, itemData.item.title)}}
 				>
 					<Button
 						color={colors.primary}
 						title="View"
-						onPress={() => {}}
+						onPress={() => {selectItemHandler(itemData.item.id, itemData.item.title)}}
 					/>
 					<Button
 						color={colors.primary}

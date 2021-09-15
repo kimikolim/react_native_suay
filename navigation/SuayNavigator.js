@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "react-navigation-stack";
-import { createAppContainer } from "react-navigation";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import colors from '../constants/colors'
 import { Platform } from "react-native";
 import {createDrawerNavigator} from 'react-navigation-drawer'
@@ -11,6 +11,8 @@ import AdminItemsScreen from '../screens/app/AdminItemsScreen'
 import UserItemsScreen from '../screens/user/UserItemsScreen'
 import UserItemDetailScreen from '../screens/user/UserItemDetailScreen'
 import UserItemEditScreen from '../screens/user/UserItemEditScreen'
+import AdminDetailsScreen from '../screens/app/AdminDetailsScreen'
+import AuthScreen from "../screens/app/AuthScreen";
 
 const defaultNavOptions = {
 	headerStyle: {
@@ -40,7 +42,8 @@ const UserNavigator = createStackNavigator(
 )
 
 const AdminNavigator = createStackNavigator({
-    AdminItemsScreen: AdminItemsScreen,
+    AdminItems: AdminItemsScreen,
+	AdminDetails: AdminDetailsScreen,
 }, {
     navigationOptions: {
         drawerIcon: drawerConfig => <Ionicons name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
@@ -49,7 +52,18 @@ const AdminNavigator = createStackNavigator({
          />
     },
     defaultNavigationOptions: defaultNavOptions
-});
+})
+
+const AuthNavigator = createStackNavigator(
+	{
+		Auth: AuthScreen,
+	},
+	{
+		defaultNavigationOptions: defaultNavOptions,
+	}
+)
+
+
 
 const MainNavigator = createDrawerNavigator({
     Users: UserNavigator,
@@ -60,4 +74,10 @@ const MainNavigator = createDrawerNavigator({
 	}
 })
 
-export default createAppContainer(MainNavigator)
+const AuthenticatedNavigator = createSwitchNavigator({
+	Auth: AuthNavigator,
+	Main: MainNavigator,
+
+})
+
+export default createAppContainer(AuthenticatedNavigator)
