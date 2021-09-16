@@ -57,17 +57,6 @@ AdminItemsScreen.navigationOptions = navData => {
 				/>
 			</HeaderButtons>
 		),
-		headerRight: () => (
-			<HeaderButtons HeaderButtonComponent={HeaderButton}>
-				<Item
-					title="Add"
-					iconName={Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"}
-					onPress={() => {
-						navData.navigation.navigate('')
-					}}
-				/>
-			</HeaderButtons>
-		),
 	}
 }
 

@@ -7,7 +7,7 @@ import colors from '../../constants/colors'
 import DefaultText from '../../components/UI/DefaultText'
 
 const UserItemDetailScreen = (props) => {
-    //params from useritemscreen - itemID , itemTitle
+    //params from adminitemscreen - itemID , itemTitle
     const itemID = props.navigation.getParam('itemID')
     const selectedItem = useSelector(state => state.items.userItems.find((item) => item.id === itemID))
     return (

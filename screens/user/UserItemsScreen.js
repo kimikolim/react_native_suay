@@ -12,6 +12,10 @@ import HeaderButton from "../../components/UI/HeaderButton"
 
 const UserItemsScreen = (props) => {
     // console.log(props);
+
+    const editProductHandler = (id) => {
+		props.navigation.navigate("UserEdit", { itemID: id })
+	}
     const selectItemHandler = (id, title) => {
         // console.log("button pressed");
         props.navigation.navigate("UserItemDetail", {
@@ -40,7 +44,7 @@ const UserItemsScreen = (props) => {
             <Button
                 color={colors.primary}
                 title="Edit"
-                onPress={() => {}}
+                onPress={() => {editProductHandler(itemData.item.id)}}
             />
         </ProductItem>
     )}/>
@@ -57,6 +61,17 @@ UserItemsScreen.navigationOptions = (navData) => {
 					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
 					onPress={() => {
 						navData.navigation.toggleDrawer()
+					}}
+				/>
+			</HeaderButtons>
+		),
+        headerRight: () => (
+			<HeaderButtons HeaderButtonComponent={HeaderButton}>
+				<Item
+					title="Add"
+					iconName={Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"}
+					onPress={() => {
+						navData.navigation.navigate('UserEdit')
 					}}
 				/>
 			</HeaderButtons>
