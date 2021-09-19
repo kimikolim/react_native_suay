@@ -7,13 +7,16 @@ import {
 	Alert,
 	KeyboardAvoidingView,
 	ActivityIndicator,
+	Button,
 } from "react-native"
+import DateTimePicker from "@react-native-community/datetimepicker"
 import { HeaderButtons, Item } from "react-navigation-header-buttons"
 import HeaderButton from "../../components/UI/HeaderButton"
 import { useSelector, useDispatch } from "react-redux"
-// import * as productsActions from "../../store/action/products"
+import * as itemsActions from "../../store/action/items"
 import Input from "../../components/UI/Input"
 import colors from "../../constants/colors"
+import DefaultText from "../../components/UI/DefaultText"
 
 //Screen reducer
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE"
@@ -41,26 +44,45 @@ const formReducer = (state, action) => {
 }
 
 const UserItemEditScreen = (props) => {
-    const itemID = props.navigation.getParam('itemID')
-    const editedItem = useSelector(state => state.items.userItems.find(item => item.id === itemID))
-    //Screen state snapshot
-    const [formState, dispatchFormState] = useReducer(formReducer, {
+    const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState()
+	// const [purchaseDate, setPurchaseDate] = useState(new Date())
+	// const [warrantyDate, setWarrantyDate] = useState(new Date())
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+		if (error) {
+			Alert.alert("An error occured", error, [{ text: "Okay" }])
+		}
+	}, [error])
+
+
+	const itemID = props.navigation.getParam("itemID")
+	const editedItem = useSelector((state) =>
+		state.items.userItems.find((item) => item.id === itemID)
+	)
+	//Screen state snapshot
+	const [formState, dispatchFormState] = useReducer(formReducer, {
 		inputValues: {
 			title: editedItem ? editedItem.title : "",
-			imgURL: editedItem ? editedItem.imgURL : "",
 			description: editedItem ? editedItem.description : "",
+			imgURL: editedItem ? editedItem.imgURL : "",
 			price: editedItem ? editedItem.price : "",
+			datePurchased: editedItem ? editedItem.datePurchased : "",
+			dateExpired: editedItem ? editedItem.dateExpired : "",
 		},
 		inputValidity: {
 			title: editedItem ? true : false,
 			imgURL: editedItem ? true : false,
 			description: editedItem ? true : false,
 			price: editedItem ? true : false,
+			datePurchased: editedItem ? true : false,
+			dateExpired: editedItem ? true : false,
 		},
 		formIsValid: editedItem ? true : false,
 	})
 
-    const inputChangeHandler = useCallback(
+	const inputChangeHandler = useCallback(
 		(inputIdentifier, inputValue, inputValidity) => {
 			// let isValid = false
 			// if (text.trim().length > 0) {
@@ -76,8 +98,73 @@ const UserItemEditScreen = (props) => {
 		[dispatchFormState]
 	)
 
-    return (
-        <KeyboardAvoidingView
+    const submitHandler = useCallback(async () => {
+		if (!formState.formIsValid) {
+			Alert.alert("Wrong Input", "Please check error in the form.", [
+				{ text: "Okay" },
+			])
+			return
+		}
+		setError(null)
+		setIsLoading(true)
+		try {
+			if (editedItem) {
+				await dispatch(
+					itemsActions.updateItem(
+						itemID,
+						formState.inputValues.title,
+						formState.inputValues.description,
+						formState.inputValues.imgURL,
+						+formState.inputValues.price,
+						formState.inputValues.datePurchased,
+						formState.inputValues.dateExpired,
+					)
+				)
+			// console.log(edited);
+			} else {
+				await dispatch(
+					itemsActions.createItem(
+						formState.inputValues.title,
+						formState.inputValues.description,
+						formState.inputValues.imgURL,
+						+formState.inputValues.price,
+						formState.inputValues.datePurchased,
+						formState.inputValues.dateExpired,
+					)
+				)
+			}
+			props.navigation.goBack()
+		} catch (error) {
+			// console.log(error.message);
+			setError(error.message)
+		}
+		setIsLoading(false)
+	}, [dispatch, itemID, formState])
+
+    useEffect(() => {
+		props.navigation.setParams({ submit: submitHandler })
+	}, [submitHandler])
+
+	// const onChangePurchaseDate = (event, selectedDate) => {
+	// 	const purchaseDate = selectedDate || date
+	// 	setDate(currentDate)
+	// }
+
+	// const onChangeWarrantyDate = (event, selectedDate) => {
+	// 	const warrantyDate = selectedDate || date
+	// 	setDate(currentDate)
+	// }
+
+    if (isLoading) {
+		return (
+			<View style={styles.centered}>
+				<ActivityIndicator size="large" color={colors.primary} />
+			</View>
+		)
+	}
+
+	return (
+		<KeyboardAvoidingView
 			style={styles.keyboardView}
 			behavior="padding"
 			keyboardVerticalOffset={100}
@@ -116,8 +203,8 @@ const UserItemEditScreen = (props) => {
 						keyboardType="decimal-pad"
 						returnKeyType="next"
 						onInputChange={inputChangeHandler}
-                        initialValue={editedItem ? editedItem.price.toString() : ""}
-                        initiallyValid={!!editedItem}
+						initialValue={editedItem ? editedItem.price.toString() : ""}
+						initiallyValid={!!editedItem}
 						required
 						min={0.1}
 					/>
@@ -137,14 +224,69 @@ const UserItemEditScreen = (props) => {
 						required
 						minLength={5}
 					/>
+
+					<Input
+						id="datePurchased"
+						label="Date Purchased (dd/mm/yyyy)"
+						errorText="Please enter date."
+						keyboardType="numbers-and-punctuation"
+						returnKeyType="next"
+						onInputChange={inputChangeHandler}
+						initialValue={editedItem ? editedItem.datePurchased : ""}
+						initiallyValid={!!editedItem}
+						required
+					/>
+
+					<Input
+						id="dateExpired"
+						label="Warranty expiry (dd/mm/yyyy)"
+						errorText="Please enter date."
+						keyboardType="numbers-and-punctuation"
+						returnKeyType="next"
+						onInputChange={inputChangeHandler}
+						initialValue={editedItem ? editedItem.dateExpired : ""}
+						initiallyValid={!!editedItem}
+						required
+					/>
+
+					{/* <View style={styles.dateContainer}>
+						<View>
+							<View>
+								<DefaultText>Date Purchased</DefaultText>
+							</View>
+
+							<DateTimePicker
+								testID="dateTimePicker"
+								value={date}
+								mode="date"
+								is24Hour={true}
+								display="default"
+								onChange={onChangeDate}
+							/>
+						</View>
+						<View>
+							<View>
+								<DefaultText>Warranty expiry</DefaultText>
+							</View>
+
+							<DateTimePicker
+								testID="dateTimePicker"
+								value={date}
+								mode="date"
+								is24Hour={true}
+								display="default"
+								onChange={onChangeDate}
+							/>
+						</View>
+					</View> */}
 				</View>
 			</ScrollView>
 		</KeyboardAvoidingView>
-    )
+	)
 }
 
 UserItemEditScreen.navigationOptions = (navData) => {
-	const submitFunc = navData.navigation.getParam("submit")
+	const submitTickBtn = navData.navigation.getParam("submit")
 	return {
 		headerTitle: navData.navigation.getParam("itemID")
 			? "Edit Product"
@@ -156,7 +298,7 @@ UserItemEditScreen.navigationOptions = (navData) => {
 					iconName={
 						Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
 					}
-					onPress={submitFunc}
+					onPress={submitTickBtn}
 				/>
 			</HeaderButtons>
 		),
@@ -166,7 +308,7 @@ UserItemEditScreen.navigationOptions = (navData) => {
 export default UserItemEditScreen
 
 const styles = StyleSheet.create({
-    form: {
+	form: {
 		margin: 20,
 	},
 	keyboardView: {
@@ -176,5 +318,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	dateContainer: {
+		flexDirection: "row",
+		justifyContent: "space-around",
+		marginTop: 15,
 	},
 })

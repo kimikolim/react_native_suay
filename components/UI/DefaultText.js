@@ -11,6 +11,7 @@ export default DefaultText
 
 const styles = StyleSheet.create({
     text: {
-        fontFamily: 'normalText'
+        fontFamily: 'normalText',
+        fontSize: 14,
     }
 })

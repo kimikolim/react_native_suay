@@ -9,13 +9,14 @@ export const UPDATE_ITEM = "UPDATE_ITEM"
 export const fetchItems = () => {
 	return async (dispatch, getState) => {
 		const userID = getState().auth.userID
+		// console.log(getState());
         try {
             const response = await axios.get(
                 "https://suay-app-default-rtdb.asia-southeast1.firebasedatabase.app/items.json"
             )
 			// console.log(response);
             const respData = await response.data
-            // console.log(respData) //returns object, the app runs array
+            console.log(respData) //returns object, the app runs array
             const loadedItems = [] //convert back to array
             for (const key in respData) {
                 loadedItems.push(
@@ -76,5 +77,46 @@ export const createItem = (title, description, imgURL, price, datePurchased, dat
 		} catch (error) {
 			throw error
 		}
+	}
+}
+
+export const updateItem = (id, title, description, imgURL, price, datePurchased, dateExpired) => {
+	return async (dispatch, getState) => {
+		// console.log(getState());
+		const token = getState().auth.token
+		// console.log(token);
+		try {
+			await axios.patch(
+				`https://potato-shop-6559a-default-rtdb.asia-southeast1.firebasedatabase.app/items/${id}.json?auth=${token}`,
+				{
+					title,
+					description,
+					imgURL,
+					price,
+					datePurchased,
+					dateExpired,
+				}
+			)
+
+
+			dispatch ({
+				type: UPDATE_ITEM,
+				pid: id,
+				itemData: {
+					title,
+					description,
+					imgURL,
+					price,
+					datePurchased,
+					dateExpired,
+				},
+			})
+
+
+
+		} catch (error) {
+			throw error
+		}
+
 	}
 }

@@ -2,11 +2,13 @@ import ITEMS from '../../data/seed-data'
 import Item from '../../models/item'
 
 //import actions from redux actions
-import { SET_ITEMS, CREATE_ITEM } from '../action/items'
+import { SET_ITEMS, CREATE_ITEM, UPDATE_ITEM } from '../action/items'
 
 const initialState = {
-    allItems: ITEMS,
-    userItems: ITEMS.filter((item) => item.ownerID === "u1")
+    // allItems: ITEMS,
+    // userItems: ITEMS.filter((item) => item.ownerID === "u1")
+    allItems: [],
+    userItems: []
 }
 
 export default (state = initialState, action) => {
@@ -32,6 +34,32 @@ export default (state = initialState, action) => {
                 allItems: state.allItems.concat(newItem),
                 userItems: state.userItems.concat(newItem)
             }
+        case UPDATE_ITEM:
+                const itemIndex = state.userItems.findIndex(
+                    (item) => item.id === action.pid
+                )
+                const updatedItem = new Item(
+                    action.pid,
+                    state.userItems[itemIndex].ownerID,
+                    action.itemData.title,
+                    action.itemData.description,
+                    action.itemData.imgURL,
+                    action.itemData.price,
+                    action.itemData.datePurchased,
+                    action.itemData.dateExpired,
+                )
+                const updatedUserItems = [...state.userItems]
+                updatedUserItems[itemIndex] = updatedItem
+                const allItemsIndex = state.allItems.findIndex(
+                    item => item.id === action.pid
+                )
+                const updatedAllItems = [...state.allItems]
+                updatedAllItems[allItemsIndex] = updatedItem
+                return {
+                    ...state,
+                    allItems: updatedAllItems,
+                    userItems: updatedUserItems
+                }
 
     }
     return state
