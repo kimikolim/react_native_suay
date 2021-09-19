@@ -49,7 +49,7 @@ const UserItemEditScreen = (props) => {
 			title: editedItem ? editedItem.title : "",
 			imgURL: editedItem ? editedItem.imgURL : "",
 			description: editedItem ? editedItem.description : "",
-			price: "",
+			price: editedItem ? editedItem.price : "",
 		},
 		inputValidity: {
 			title: editedItem ? true : false,
@@ -111,11 +111,13 @@ const UserItemEditScreen = (props) => {
 
 					<Input
 						id="price"
-						label="Price"
+						label="Price ($)"
 						errorText="Please enter valid price."
 						keyboardType="decimal-pad"
 						returnKeyType="next"
 						onInputChange={inputChangeHandler}
+                        initialValue={editedItem ? editedItem.price.toString() : ""}
+                        initiallyValid={!!editedItem}
 						required
 						min={0.1}
 					/>
@@ -141,6 +143,38 @@ const UserItemEditScreen = (props) => {
     )
 }
 
+UserItemEditScreen.navigationOptions = (navData) => {
+	const submitFunc = navData.navigation.getParam("submit")
+	return {
+		headerTitle: navData.navigation.getParam("itemID")
+			? "Edit Product"
+			: "Add Product",
+		headerRight: () => (
+			<HeaderButtons HeaderButtonComponent={HeaderButton}>
+				<Item
+					title="Save"
+					iconName={
+						Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
+					}
+					onPress={submitFunc}
+				/>
+			</HeaderButtons>
+		),
+	}
+}
+
 export default UserItemEditScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    form: {
+		margin: 20,
+	},
+	keyboardView: {
+		flex: 1,
+	},
+	centered: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+})
