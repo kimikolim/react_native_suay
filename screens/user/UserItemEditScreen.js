@@ -120,7 +120,7 @@ const UserItemEditScreen = (props) => {
 						formState.inputValues.dateExpired,
 					)
 				)
-			// console.log(edited);
+			// console.log('testing');
 			} else {
 				await dispatch(
 					itemsActions.createItem(

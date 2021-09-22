@@ -2,7 +2,7 @@ import { AUTHENTICATE, LOGOUT } from "../action/auth"
 
 const initialState = {
     token: null,
-    userID: null
+    userID: null,
 }
 
 export default (state = initialState, action) => {

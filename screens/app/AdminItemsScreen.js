@@ -14,8 +14,6 @@ const AdminItemsScreen = (props) => {
 	const [error, setError] = useState()
 	const dispatch = useDispatch()
 
-	const allItems = useSelector((state) => state.items.allItems)
-
 	const loadItems = useCallback(async() => {
 		setError(null)
 		setIsRefreshing(true)
@@ -26,6 +24,7 @@ const AdminItemsScreen = (props) => {
 		}
 		setIsRefreshing(false)
 	}, [dispatch, setIsLoading, setError])
+	const allItems = useSelector((state) => state.items.allItems)
 
 	useEffect(() => {
 		const willFocusSub = props.navigation.addListener('willFocus', loadItems)

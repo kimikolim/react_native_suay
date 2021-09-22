@@ -10,14 +10,19 @@ const UserItemDetailScreen = (props) => {
     //params from adminitemscreen - itemID , itemTitle
     const itemID = props.navigation.getParam('itemID')
     const selectedItem = useSelector(state => state.items.userItems.find((item) => item.id === itemID))
-    return (
+
+	const editProductHandler = (id) => {
+		props.navigation.navigate('UserEdit', {itemID: id})
+	}
+
+	return (
         <ScrollView>
             <Image style={styles.image} source={{ uri: selectedItem.imgURL }} />
 			<View style={styles.action}>
 				<Button
 					color={colors.secondary}
 					title="Edit"
-					onPress={() => {}}
+					onPress={() => {editProductHandler(selectedItem.id)}}
 				/>
 				<Button
 					color={colors.secondary}

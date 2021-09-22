@@ -3,8 +3,8 @@ import Item from  "../../models/item"
 
 export const SET_ITEMS = "SET_ITEMS"
 export const CREATE_ITEM = "CREATE_ITEM"
-export const DELETE_ITEM = "DELETE_ITEM"
 export const UPDATE_ITEM = "UPDATE_ITEM"
+export const DELETE_ITEM = "DELETE_ITEM"
 
 export const fetchItems = () => {
 	return async (dispatch, getState) => {
@@ -16,7 +16,7 @@ export const fetchItems = () => {
             )
 			// console.log(response);
             const respData = await response.data
-            console.log(respData) //returns object, the app runs array
+            // console.log(respData) //returns object, the app runs array
             const loadedItems = [] //convert back to array
             for (const key in respData) {
                 loadedItems.push(
@@ -85,9 +85,10 @@ export const updateItem = (id, title, description, imgURL, price, datePurchased,
 		// console.log(getState());
 		const token = getState().auth.token
 		// console.log(token);
+		// console.log(id);
 		try {
 			await axios.patch(
-				`https://potato-shop-6559a-default-rtdb.asia-southeast1.firebasedatabase.app/items/${id}.json?auth=${token}`,
+				`https://suay-app-default-rtdb.asia-southeast1.firebasedatabase.app/items/${id}.json?auth=${token}`,
 				{
 					title,
 					description,
