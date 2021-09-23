@@ -20,6 +20,7 @@ import UserItemEditScreen from "../screens/user/UserItemEditScreen"
 import AdminDetailsScreen from "../screens/app/AdminDetailsScreen"
 import AuthScreen from "../screens/app/AuthScreen"
 import LauncherScreen from "../screens/app/LauncherScreen"
+import UserFavouriteScreen from "../screens/user/UserFavouriteScreen"
 
 const defaultNavOptions = {
 	headerStyle: {
@@ -42,6 +43,24 @@ const UserNavigator = createStackNavigator(
 			drawerIcon: (drawerConfig) => (
 				<Ionicons
 					name={Platform.OS === "android" ? "md-list" : "ios-list"}
+					size={23}
+					color={drawerConfig.tintColor}
+				/>
+			),
+		},
+		defaultNavigationOptions: defaultNavOptions,
+	}
+)
+
+const favNavigator = createStackNavigator(
+	{
+		UserFavorite: UserFavouriteScreen,
+		UserItemDetail: UserItemDetailScreen,
+	}, {
+		navigationOptions: {
+			drawerIcon: (drawerConfig) => (
+				<Ionicons
+					name={Platform.OS === "android" ? "ios-star" : "ios-star-outline"}
 					size={23}
 					color={drawerConfig.tintColor}
 				/>
@@ -82,6 +101,7 @@ const AuthNavigator = createStackNavigator(
 const MainNavigator = createDrawerNavigator(
 	{
 		Users: UserNavigator,
+		Favourites: favNavigator,
 		Admin: AdminNavigator,
 	},
 	{

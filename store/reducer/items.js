@@ -2,19 +2,21 @@ import ITEMS from '../../data/seed-data'
 import Item from '../../models/item'
 
 //import actions from redux actions
-import { SET_ITEMS, CREATE_ITEM, UPDATE_ITEM } from '../action/items'
+import { SET_ITEMS, CREATE_ITEM, UPDATE_ITEM, DELETE_ITEM, SET_FAVOURITE } from '../action/items'
 
 const initialState = {
-    // allItems: ITEMS,
     // userItems: ITEMS.filter((item) => item.ownerID === "u1")
     allItems: [],
     userItems: [],
+    favouriteItems: [],
 }
 
-export default (state = initialState, action) => {
+const itemsReducer = (state = initialState, action) => {
+    // console.log(state);
     switch (action.type) {
         case SET_ITEMS:
             return {
+                ...state,
                 allItems: action.items,
                 userItems: action.userItems
             }
@@ -61,7 +63,28 @@ export default (state = initialState, action) => {
                     allItems: updatedAllItems,
                     userItems: updatedUserItems
                 }
+        case DELETE_ITEM:
+            return {
+                ...state,
+                allItems: state.allItems.filter(item => item.id !== action.pid),
+                userItems: state.userItems.filter(item => item.id !== action.pid),
+            }
+        case SET_FAVOURITE:
+            // console.log(state.favouriteItems)
 
+            const existingIndex = state.favouriteItems.findIndex(item => item.id === action.itemID)
+            if (existingIndex >= 0) {
+                const updateFavItems = [...state.favouriteItems]
+                updateFavItems.splice(existingIndex, 1)
+                return { ...state, favouriteItems: updateFavItems}
+            } else {
+                const favItem = state.userItems.find(item => item.id === action.itemID)
+                return {...state, favouriteItems: state.favouriteItems.concat(favItem)}
+            }
+
+        default:
+            return state
     }
-    return state
 }
+
+export default itemsReducer
