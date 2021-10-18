@@ -35,6 +35,10 @@ const AdminDetailsScreen = (props) => {
     )
 }
 
+AdminDetailsScreen.navigationOptions = {
+	headerTitle: 'Admin'
+}
+
 export default AdminDetailsScreen
 
 const styles = StyleSheet.create({
