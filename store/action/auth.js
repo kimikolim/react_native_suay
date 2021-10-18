@@ -1,3 +1,4 @@
+require('dotenv').config()
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -15,7 +16,7 @@ export const signup = (email, password) => {
 		try {
 			const response = await axios.post(
 				//api key cannot use .env
-				`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCOk5GVRujQkUgWyMf04bAjkrmzThWJ_pY`,
+				`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.API_KEY}`,
 				{
 					email,
 					password,
@@ -47,7 +48,7 @@ export const login = (email, password) => {
 	return async (dispatch) => {
 		try {
 			const response = await axios.post(
-				`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCOk5GVRujQkUgWyMf04bAjkrmzThWJ_pY`,
+				`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.API_KEY}`,
 				{
 					email,
 					password,
