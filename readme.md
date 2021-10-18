@@ -1,6 +1,6 @@
 # SUAY &#x1F4D8;
 Ever bought something new and then it freaking breaks?! That's what we call "Sibei suay".
-SUAY is a serveless mobile warranty tracker application to keep records of newly purchased items validity of warranty.
+SUAY is a serveless mobile warranty tracker application to keep records of newly purchased items warranty validity.
 
 &nbsp;
 
